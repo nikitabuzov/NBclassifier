@@ -5,8 +5,9 @@ from math import log
 def run_train_test(training_file, testing_file):
 
     # Set the variables, params, dicts, sets
-    alpha = 0.001
-    stop_words = {'ourselves', 'hers', 'between', 'yourself', 'but', 'again', 'there', 'about', 'once', 'during', 'out', 'very', 'having', 'with', 'they', 'own', 'an', 'be', 'some', 'for', 'do', 'its', 'yours', 'such', 'into', 'of', 'most', 'itself', 'other', 'off', 'is', 's', 'am', 'or', 'who', 'as', 'from', 'him', 'each', 'the', 'themselves', 'until', 'below', 'are', 'we', 'these', 'your', 'his', 'through', 'don', 'nor', 'me', 'were', 'her', 'more', 'himself', 'this', 'down', 'should', 'our', 'their', 'while', 'above', 'both', 'up', 'to', 'ours', 'had', 'she', 'all', 'no', 'when', 'at', 'any', 'before', 'them', 'same', 'and', 'been', 'have', 'in', 'will', 'on', 'does', 'yourselves', 'then', 'that', 'because', 'what', 'over', 'why', 'so', 'can', 'did', 'not', 'now', 'under', 'he', 'you', 'herself', 'has', 'just', 'where', 'too', 'only', 'myself', 'which', 'those', 'i', 'after', 'few', 'whom', 't', 'being', 'if', 'theirs', 'my', 'against', 'a', 'by', 'doing', 'it', 'how', 'further', 'was', 'here', 'than'}
+    alpha = 0.5
+    stop_words = {'the','to','and','i'}
+
 
 
     # Import training dataset
@@ -56,8 +57,12 @@ def run_train_test(training_file, testing_file):
     bottom_0 = sum(wordcount_class_0.values()) + alpha*len(vocab)
     bottom_1 = sum(wordcount_class_1.values()) + alpha*len(vocab)
     for word in vocab:
-        P_words_class_0[word] = (wordcount_class_0[word] + alpha) / bottom_0
-        P_words_class_1[word] = (wordcount_class_1[word] + alpha) / bottom_1
+        if word in stop_words:
+            P_words_class_0[word] = (0 + alpha) / bottom_0
+            P_words_class_1[word] = (0 + alpha) / bottom_1
+        else:
+            P_words_class_0[word] = (wordcount_class_0[word] + alpha) / bottom_0
+            P_words_class_1[word] = (wordcount_class_1[word] + alpha) / bottom_1
 
     # Inference on the training dataset
     predict_train_labels = []
