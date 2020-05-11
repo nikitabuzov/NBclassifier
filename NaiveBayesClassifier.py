@@ -6,7 +6,9 @@ def run_train_test(training_file, testing_file):
 
     # Set the variables, params, dicts, sets
     alpha = 0.5
-    stop_words = {'the','and'}
+    stop_words = {'the','and'}  # Stop words
+    logic_negation = {'t','not','no','never','dont','didnt','doesnt'} # Words indicating negation
+
 
     # Import training dataset
     training_start_time = time.time()
@@ -24,9 +26,23 @@ def run_train_test(training_file, testing_file):
             words = review.split(' ')
             del words[-1]
             label = int(label.strip("\n"))
-
             total_reviews += 1
-            words = set(words)
+            # Implement negation: add NOT_ to words after logical negation
+            for i in range(len(words)):
+                if words[i] in logic_negation:
+                    try:
+                        words[i+1] = 'NOT_' + words[i+1]
+                    except:
+                        continue
+                    try:
+                        words[i+2] = 'NOT_' + words[i+2]
+                    except:
+                        continue
+                    try:
+                        words[i+3] = 'NOT_' + words[i+3]
+                    except:
+                        continue
+            words = set(words)  # Binary NB
             vocab.update(words)
             for word in words:
                 if word not in wordcount_class_0.keys():
@@ -101,7 +117,22 @@ def run_train_test(training_file, testing_file):
             words = review.split(' ')
             del words[-1]
             label = int(label.strip("\n"))
-
+            # Implement negation: add NOT_ to words after logical negation
+            for i in range(len(words)):
+                if words[i] in logic_negation:
+                    try:
+                        words[i+1] = 'NOT_' + words[i+1]
+                    except:
+                        continue
+                    try:
+                        words[i+2] = 'NOT_' + words[i+2]
+                    except:
+                        continue
+                    try:
+                        words[i+3] = 'NOT_' + words[i+3]
+                    except:
+                        continue
+            words = set(words)  # Binary NB
             test_labels.append(label)
             test_reviews.append(words)
 
