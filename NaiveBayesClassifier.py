@@ -1,6 +1,5 @@
 import numpy as np
 import time
-
 from math import log
 
 def run_train_test(training_file, testing_file):
