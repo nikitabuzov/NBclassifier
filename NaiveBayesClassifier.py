@@ -6,9 +6,7 @@ def run_train_test(training_file, testing_file):
 
     # Set the variables, params, dicts, sets
     alpha = 0.5
-    stop_words = {'the','to','and','i'}
-
-
+    stop_words = {'the','and'}
 
     # Import training dataset
     training_start_time = time.time()
@@ -28,7 +26,7 @@ def run_train_test(training_file, testing_file):
             label = int(label.strip("\n"))
 
             total_reviews += 1
-
+            words = set(words)
             vocab.update(words)
             for word in words:
                 if word not in wordcount_class_0.keys():
