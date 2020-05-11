@@ -38,10 +38,7 @@ def run_train_test(training_file, testing_file):
                         words[i+2] = 'NOT_' + words[i+2]
                     except:
                         continue
-                    try:
-                        words[i+3] = 'NOT_' + words[i+3]
-                    except:
-                        continue
+                    
             words = set(words)  # Binary NB
             vocab.update(words)
             for word in words:
@@ -128,10 +125,7 @@ def run_train_test(training_file, testing_file):
                         words[i+2] = 'NOT_' + words[i+2]
                     except:
                         continue
-                    try:
-                        words[i+3] = 'NOT_' + words[i+3]
-                    except:
-                        continue
+
             words = set(words)  # Binary NB
             test_labels.append(label)
             test_reviews.append(words)
