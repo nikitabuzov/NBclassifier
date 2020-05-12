@@ -1,6 +1,7 @@
 import numpy as np
 import time
 from math import log
+import lexicons
 
 def run_train_test(training_file, testing_file):
 
@@ -12,9 +13,9 @@ def run_train_test(training_file, testing_file):
 
     # Import training dataset
     training_start_time = time.time()
-    vocab = set()
-    wordcount_class_0 = {}
-    wordcount_class_1 = {}
+    vocab = set(['positive-words','negative-words'])
+    wordcount_class_0 = {'positive-words':0,'negative-words':0}
+    wordcount_class_1 = {'positive-words':0,'negative-words':0}
     total_reviews = 0
     reviewscount_0 = 0
     reviewscount_1 = 0
@@ -38,7 +39,7 @@ def run_train_test(training_file, testing_file):
                         words[i+2] = 'NOT_' + words[i+2]
                     except:
                         continue
-                    
+
             words = set(words)  # Binary NB
             vocab.update(words)
             for word in words:
@@ -50,10 +51,21 @@ def run_train_test(training_file, testing_file):
                 reviewscount_0 += 1
                 for word in words:
                     wordcount_class_0[word] += 1
+                    # Analyze Sentiment lexicons
+                    if word in lexicons.pos_words:
+                        wordcount_class_0['positive-words'] += 1
+                    if word in lexicons.neg_words:
+                        wordcount_class_0['negative-words'] += 1
+
             if label==1:
                 reviewscount_1 += 1
                 for word in words:
                     wordcount_class_1[word] += 1
+                    # Analyze Sentiment lexicons
+                    if word in lexicons.pos_words:
+                        wordcount_class_1['positive-words'] += 1
+                    if word in lexicons.neg_words:
+                        wordcount_class_1['negative-words'] += 1
 
             train_labels.append(label)
             train_reviews.append(words)
@@ -84,6 +96,13 @@ def run_train_test(training_file, testing_file):
         for word in bag_of_words:
             log_sum_0 += log(P_words_class_0[word])
             log_sum_1 += log(P_words_class_1[word])
+            # Sentiment Analysis
+            if word in lexicons.pos_words:
+                log_sum_0 += log(P_words_class_0['positive-words'])
+                log_sum_1 += log(P_words_class_1['positive-words'])
+            if word in lexicons.neg_words:
+                log_sum_0 += log(P_words_class_0['negative-words'])
+                log_sum_1 += log(P_words_class_1['negative-words'])
         Prob_c0 = log(P_class[0]) + log_sum_0
         Prob_c1 = log(P_class[1]) + log_sum_1
         if Prob_c0 > Prob_c1:
@@ -140,6 +159,13 @@ def run_train_test(training_file, testing_file):
         for word in bag_of_words:
             log_sum_0 += log(P_words_class_0[word])
             log_sum_1 += log(P_words_class_1[word])
+            # Sentiment Analysis
+            if word in lexicons.pos_words:
+                log_sum_0 += log(P_words_class_0['positive-words'])
+                log_sum_1 += log(P_words_class_1['positive-words'])
+            if word in lexicons.neg_words:
+                log_sum_0 += log(P_words_class_0['negative-words'])
+                log_sum_1 += log(P_words_class_1['negative-words'])
         Prob_c0 = log(P_class[0]) + log_sum_0
         Prob_c1 = log(P_class[1]) + log_sum_1
         if Prob_c0 > Prob_c1:
